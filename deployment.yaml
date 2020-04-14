@@ -1,0 +1,26 @@
+---
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  name: "bt-api-users"
+  namespace: "default"
+  labels:
+    app: "bt-api-users"
+spec:
+  progressDeadlineSeconds: 180
+  replicas: 1
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels:
+      app: "bt-api-users"
+  template:
+    metadata:
+      labels:
+        app: "bt-api-users"
+    spec:
+      containers:
+        - name: "api-bt-users"
+          image: "eu.gcr.io/bill-tracker-dev-273117/api-bt-users:${TAG}"
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8082
