@@ -15,7 +15,7 @@ public class UsersController {
 
     @GetMapping(value = "")
     public ResponseEntity<?> getUsers(){
-        String getString = "[GET] Users";
+        String getString = "[GET] Users v1";
         return new ResponseEntity<>(getString, HttpStatus.OK);
     }
 

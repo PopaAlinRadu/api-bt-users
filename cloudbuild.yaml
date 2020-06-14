@@ -1,29 +1,32 @@
 steps:
-    # This step replace in deployment file the image tag
-  - name: 'eu.gcr.io/$PROJECT_ID/environment-substitute:1.0.0'
-    id: Replace image tag from deployment.yaml
-    args: ['/workspace/deployment.yaml', '/workspace/deployment.yaml']
-    env:
-      - 'TAG=$SHORT_SHA'
-    # This step install dependencies and build jar
+    #This step build jar file
   - name: 'gcr.io/cloud-builders/mvn'
     id: BuildJar
     args: ['install', '-Dmaven.test.skip=true']
     # This step builds the container image.
   - name: 'gcr.io/cloud-builders/docker'
-    id: Build docker image
-    args: ['build', '-t', 'eu.gcr.io/$PROJECT_ID/${_IMAGE_NAME}:$SHORT_SHA', '.']
+    id: BuildImg
+    args: ['build', '-t', 'eu.gcr.io/$PROJECT_ID/${_NAME}:$SHORT_SHA', '.']
     #This step push image to gcr.io registry
   - name: "gcr.io/cloud-builders/docker"
-    id: Push docker image to cloud registry
-    args: ["push", "eu.gcr.io/$PROJECT_ID/${_IMAGE_NAME}:$SHORT_SHA"]
-    #This step deploy container to GKE
-  - name: 'gcr.io/cloud-builders/kubectl'
-    id: Apply deployment.yaml file
-    args: ['apply', '-f', 'deployment.yaml']
-    env: ['CLOUDSDK_COMPUTE_ZONE=${_CLOUDSDK_COMPUTE_ZONE}','CLOUDSDK_CONTAINER_CLUSTER=${_CLOUDSDK_CONTAINER_CLUSTER}']
+    id: PushImg
+    args: ["push", "eu.gcr.io/$PROJECT_ID/${_NAME}:$SHORT_SHA"]
+    #This step deploy container to Cloud Run
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: Deploy
+    args: [
+      'run',
+      'deploy',
+      '${_NAME}',
+      '--image', 'eu.gcr.io/$PROJECT_ID/${_NAME}:$SHORT_SHA',
+      '--region', '${_REGION}',
+      '--platform', '${_PLATFORM}',
+      '--allow-unauthenticated',
+      '--port', '${_PORT}'
+    ]
 
 substitutions:
-  _CLOUDSDK_CONTAINER_CLUSTER: 'bt-cluster'
-  _CLOUDSDK_COMPUTE_ZONE: 'europe-west1-b'
-  _IMAGE_NAME: 'api-bt-users'
+  _REGION: 'europe-west1'
+  _NAME: 'api-bt-users'
+  _PLATFORM: 'managed'
+  _PORT: '8082'
