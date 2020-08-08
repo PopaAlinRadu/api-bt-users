@@ -15,9 +15,13 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final MongoOperations mongoOperations;
+    private final DatabaseSequenceGeneratorService databaseSequenceGeneratorService;
 
     public UserDto registerUser(UserDto userDto){
-        User savedUser = userRepository.save(userDto.convertToUser());
+        User userToSave = userDto.convertToUser();
+        long id = databaseSequenceGeneratorService.generateUserSequence(userToSave.getClass().getSimpleName());
+        userToSave.setId(String.valueOf(id));
+        User savedUser = userRepository.save(userToSave);
         return userDto.convertToUserDto(savedUser);
     }
 }

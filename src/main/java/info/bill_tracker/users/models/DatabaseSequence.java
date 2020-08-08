@@ -7,13 +7,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @AllArgsConstructor
-@Document(collection = "users")
-public class User {
+@Document(collection = "database_sequence")
+public class DatabaseSequence {
 
     @Id
-//    @Indexed(unique = true)
     private String id;
 
-    private String username;
+    private long sequence;
 
 }
