@@ -17,8 +17,7 @@ public class UserService {
     private final MongoOperations mongoOperations;
 
     public UserDto registerUser(UserDto userDto){
-        User userToSave = userDto.convertToUser();
-        User savedUser = userRepository.save(userToSave);
+        User savedUser = userRepository.save(userDto.convertToUser());
         return userDto.convertToUserDto(savedUser);
     }
 }

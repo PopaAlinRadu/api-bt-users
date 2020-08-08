@@ -4,11 +4,13 @@ import info.bill_tracker.users.models.UserDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RequestMapping("/users")
 public interface IUsersController {
 
     @PostMapping(value = "/register")
-    ResponseEntity<?> registerUser(@RequestBody  UserDto userDto);
+    ResponseEntity<?> registerUser(@Valid @RequestBody UserDto userDto);
 
     @PostMapping(value = "/authenticate")
     ResponseEntity<?> authenticate();
