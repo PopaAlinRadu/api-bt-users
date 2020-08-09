@@ -26,8 +26,8 @@ public class DatabaseSequenceGeneratorService {
         Update update = new Update().inc("sequence", 1);
         FindAndModifyOptions upsert = options().returnNew(true).upsert(true);
 
-        DatabaseSequence andModify = mongoOperations.findAndModify(query, update, upsert, DatabaseSequence.class);
-        return Objects.nonNull(andModify) ? andModify.getSequence() : 1;
+        DatabaseSequence result = mongoOperations.findAndModify(query, update, upsert, DatabaseSequence.class);
+        return Objects.nonNull(result) ? result.getSequence() : 1;
     }
 
 }

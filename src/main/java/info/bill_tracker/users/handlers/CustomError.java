@@ -15,4 +15,8 @@ public class CustomError {
         this.errorMessage = objectError.getDefaultMessage();
     }
 
+    public CustomError(String fieldName, String errorMessage) {
+        this.fieldName = fieldName;
+        this.errorMessage = errorMessage;
+    }
 }
