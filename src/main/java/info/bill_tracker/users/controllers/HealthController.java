@@ -1,4 +1,4 @@
-package info.bill_tracker.users;
+package info.bill_tracker.users.controllers;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

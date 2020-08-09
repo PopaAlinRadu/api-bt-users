@@ -1,4 +1,4 @@
-package info.bill_tracker.configurations;
+package info.bill_tracker.users.configurations;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
