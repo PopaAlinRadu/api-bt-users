@@ -20,7 +20,7 @@ public class UserService {
     public UserDto registerUser(UserDto userDto){
         User userToSave = userDto.convertToUser();
         long id = databaseSequenceGeneratorService.generateUserSequence(userToSave.getClass().getSimpleName());
-        userToSave.setId(String.valueOf(id));
+        userToSave.setId(id);
         User savedUser = userRepository.save(userToSave);
         return userDto.convertToUserDto(savedUser);
     }

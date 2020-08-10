@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 public class UserDto {
 
-    private final String id;
+    private final long id;
 
     @NotBlank(message = "Username must be set!")
     @NotNull(message = "Username must not be null!")
