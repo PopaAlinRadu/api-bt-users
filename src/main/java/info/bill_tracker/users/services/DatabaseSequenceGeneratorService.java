@@ -4,6 +4,7 @@ import info.bill_tracker.users.models.DatabaseSequence;
 import lombok.AllArgsConstructor;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoOperations;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
@@ -18,7 +19,7 @@ import static org.springframework.data.mongodb.core.FindAndModifyOptions.options
 @AllArgsConstructor
 public class DatabaseSequenceGeneratorService {
 
-    private final MongoOperations mongoOperations;
+    private final MongoTemplate mongoTemplate;
 
     public long generateUserSequence(String classSeqName) {
 
@@ -26,7 +27,7 @@ public class DatabaseSequenceGeneratorService {
         Update update = new Update().inc("sequence", 1);
         FindAndModifyOptions upsert = options().returnNew(true).upsert(true);
 
-        DatabaseSequence result = mongoOperations.findAndModify(query, update, upsert, DatabaseSequence.class);
+        DatabaseSequence result = mongoTemplate.findAndModify(query, update, upsert, DatabaseSequence.class);
         return Objects.nonNull(result) ? result.getSequence() : 1;
     }
 

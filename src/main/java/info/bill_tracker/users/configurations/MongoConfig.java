@@ -2,12 +2,15 @@ package info.bill_tracker.users.configurations;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.codec.binary.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 @Configuration
+@Slf4j
 public class MongoConfig {
 
     @Value("${connection.mongo.prefix}")
@@ -40,18 +43,30 @@ public class MongoConfig {
 
     private String getConnectionString() {
         StringBuilder connectionString = new StringBuilder();
-        return connectionString.append(mongoPrefix)
+        connectionString.append(mongoPrefix)
                 .append(username)
                 .append(":")
-                .append(password)
+                .append(encodePassword(password))
                 .append("@")
                 .append(host)
                 .append("/")
                 .append(database)
                 .append("?")
-                .append(options)
-                .toString();
+                .append(options);
+        log.debug("Connecting to :: {}", connectionString.toString());
+        return connectionString.toString();
 
+    }
+
+    private String encodePassword(String password) {
+        String encodedPassword = "";
+        try {
+            byte[] bytes = StringUtils.getBytesUtf8(password);
+            encodedPassword = StringUtils.newStringUtf8(bytes);
+        } catch (Exception e) {
+            log.debug("Operation failed :: {}", e.toString());
+        }
+        return encodedPassword;
     }
 
 }
